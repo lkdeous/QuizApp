@@ -1,8 +1,11 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Quiz() {
-  const [questions, setQuestions] = useState([
+  const navigate = useNavigate();
+
+  // --- Load questions from localStorage or use default ---
+  const defaultQuestions = [
     {
       question: "What is the capital of Japan?",
       options: ["Beijing", "Seoul", "Tokyo", "Bangkok"],
@@ -18,7 +21,12 @@ function Quiz() {
       options: ["Venus", "Earth", "Neptune", "Uranus"],
       correct: "Earth",
     },
-  ]);
+  ];
+
+  const [questions, setQuestions] = useState(() => {
+    const stored = localStorage.getItem("questions");
+    return stored ? JSON.parse(stored) : defaultQuestions;
+  });
 
   const [current, setCurrent] = useState(0);
   const [score, setScore] = useState(0);
@@ -30,8 +38,12 @@ function Quiz() {
   });
   const [editIndex, setEditIndex] = useState(null);
 
-  const navigate = useNavigate();
+  // --- Save questions to localStorage whenever they change ---
+  useEffect(() => {
+    localStorage.setItem("questions", JSON.stringify(questions));
+  }, [questions]);
 
+  // --- Quiz answer handler ---
   function handleAnswer(opt) {
     if (opt === questions[current].correct) {
       setScore(score + 1);
@@ -89,7 +101,6 @@ function Quiz() {
         {showManager ? "Back to Quiz" : "Manage Questions ⚙️"}
       </button>
 
-      
       {!showManager ? (
         <div>
           {questions.length > 0 ? (
@@ -112,8 +123,6 @@ function Quiz() {
           )}
         </div>
       ) : (
-
-        
         <div className="manager">
           <h3>{editIndex !== null ? "Edit Question ✏️" : "Add Question ➕"}</h3>
 

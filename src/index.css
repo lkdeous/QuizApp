@@ -1,11 +1,23 @@
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* Gradient background */
+  background: linear-gradient(135deg, #636fdf, #133c76);
+}
 .card {
-  max-width: 500px;
-  margin: 30px auto;
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  max-width: 600px;      
+  width: 90%;       
+  padding: 30px;       
+  border-radius: 20px;   
   text-align: center;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-size: 20px;       
 }
 
 .btn {
@@ -16,10 +28,12 @@
   margin: 5px;
   border-radius: 8px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 .btn:hover {
-  opacity: 0.9;
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
 }
 
 .options button {
@@ -28,6 +42,17 @@
   margin: 6px 0;
   border-radius: 10px;
   padding: 8px;
+  border: none;
+  background: #66a6ff;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  transition: 0.3s ;
+  font-size: 20px;
+}
+
+.options button:hover {
+  transform: translateY(-2px);
+  background-color: #42dd5e; 
 }
 
 .manager input {
