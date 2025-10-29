@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Quiz() {
-  const navigate = useNavigate();
-
-  // --- initial questions ---
+function Quiz() {
   const [questions, setQuestions] = useState([
     {
       question: "What is the capital of Japan?",
@@ -12,12 +9,12 @@ export default function Quiz() {
       correct: "Tokyo",
     },
     {
-      question: "Which element has the chemical symbol 'O'?",
+      question: "Which element has the symbol 'O'?",
       options: ["Gold", "Oxygen", "Osmium", "Iron"],
       correct: "Oxygen",
     },
     {
-      question: "Which planet is known as the Blue Planet?",
+      question: "Which planet is called the Blue Planet?",
       options: ["Venus", "Earth", "Neptune", "Uranus"],
       correct: "Earth",
     },
@@ -26,45 +23,44 @@ export default function Quiz() {
   const [current, setCurrent] = useState(0);
   const [score, setScore] = useState(0);
   const [showManager, setShowManager] = useState(false);
+  const [form, setForm] = useState({
+    question: "",
+    options: ["", "", "", ""],
+    correct: "",
+  });
   const [editIndex, setEditIndex] = useState(null);
 
-  // --- handle answer ---
-  const handleAnswer = (option) => {
-    if (option === questions[current].correct) {
+  const navigate = useNavigate();
+
+  function handleAnswer(opt) {
+    if (opt === questions[current].correct) {
       setScore(score + 1);
     }
+
     const next = current + 1;
     if (next < questions.length) {
       setCurrent(next);
     } else {
       navigate("/result", { state: { score, total: questions.length } });
     }
-  };
+  }
 
-  // --- new question form ---
-  const [form, setForm] = useState({
-    question: "",
-    options: ["", "", "", ""],
-    correct: "",
-  });
+  function handleOptionChange(i, value) {
+    const newOptions = [...form.options];
+    newOptions[i] = value;
+    setForm({ ...form, options: newOptions });
+  }
 
-  const handleOptionChange = (index, value) => {
-    const updated = [...form.options];
-    updated[index] = value;
-    setForm({ ...form, options: updated });
-  };
-
-  // --- add or update question ---
-  const handleSave = () => {
-    if (!form.question || form.options.some((o) => !o) || !form.correct) {
-      alert("Please fill in all fields!");
+  function handleSave() {
+    if (!form.question || !form.correct || form.options.some((x) => !x)) {
+      alert("Please fill all fields!");
       return;
     }
 
     if (editIndex !== null) {
-      const updated = [...questions];
-      updated[editIndex] = form;
-      setQuestions(updated);
+      const newQ = [...questions];
+      newQ[editIndex] = form;
+      setQuestions(newQ);
       setEditIndex(null);
       alert("Question updated!");
     } else {
@@ -73,61 +69,57 @@ export default function Quiz() {
     }
 
     setForm({ question: "", options: ["", "", "", ""], correct: "" });
-  };
+  }
 
-  // --- delete question ---
-  const handleDelete = (index) => {
-    const updated = questions.filter((_, i) => i !== index);
-    setQuestions(updated);
-  };
+  function handleDelete(i) {
+    const newQ = questions.filter((q, index) => index !== i);
+    setQuestions(newQ);
+  }
 
-  // --- edit question ---
-  const handleEdit = (index) => {
-    setForm(questions[index]);
-    setEditIndex(index);
-  };
+  function handleEdit(i) {
+    setForm(questions[i]);
+    setEditIndex(i);
+  }
 
   return (
     <div className="card fade-in">
       <h2>📘 Quiz Time</h2>
 
-      <button
-        className="btn"
-        style={{ marginBottom: "15px" }}
-        onClick={() => setShowManager(!showManager)}
-      >
+      <button className="btn" onClick={() => setShowManager(!showManager)}>
         {showManager ? "Back to Quiz" : "Manage Questions ⚙️"}
       </button>
 
-      {/* ------------- Quiz Mode ------------- */}
+      
       {!showManager ? (
         <div>
           {questions.length > 0 ? (
-            <>
+            <div>
               <h3>
                 Question {current + 1} / {questions.length}
               </h3>
               <p className="question">{questions[current].question}</p>
+
               <div className="options">
-                {questions[current].options.map((opt) => (
-                  <button key={opt} onClick={() => handleAnswer(opt)}>
+                {questions[current].options.map((opt, i) => (
+                  <button key={i} onClick={() => handleAnswer(opt)}>
                     {opt}
                   </button>
                 ))}
               </div>
-            </>
+            </div>
           ) : (
-            <p>No questions available. Please add some in Manager mode.</p>
+            <p>No questions yet. Please add some.</p>
           )}
         </div>
       ) : (
-        /* ------------- Question Manager ------------- */
+
+        
         <div className="manager">
           <h3>{editIndex !== null ? "Edit Question ✏️" : "Add Question ➕"}</h3>
 
           <input
             type="text"
-            placeholder="Enter question"
+            placeholder="Question"
             value={form.question}
             onChange={(e) => setForm({ ...form, question: e.target.value })}
           />
@@ -150,7 +142,7 @@ export default function Quiz() {
           />
 
           <button className="btn" onClick={handleSave}>
-            {editIndex !== null ? "Update Question" : "Add Question"}
+            {editIndex !== null ? "Update" : "Add"}
           </button>
 
           <hr />
@@ -159,17 +151,19 @@ export default function Quiz() {
           {questions.map((q, i) => (
             <div key={i} className="q-item">
               <p>
-                <strong>{i + 1}.</strong> {q.question}
+                <b>{i + 1}.</b> {q.question}
               </p>
-              <button className="btn small" onClick={() => handleEdit(i)}>
-                Edit
-              </button>
-              <button
-                className="btn small danger"
-                onClick={() => handleDelete(i)}
-              >
-                Delete
-              </button>
+              <div>
+                <button className="btn small" onClick={() => handleEdit(i)}>
+                  Edit
+                </button>
+                <button
+                  className="btn small danger"
+                  onClick={() => handleDelete(i)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -177,3 +171,5 @@ export default function Quiz() {
     </div>
   );
 }
+
+export default Quiz;
