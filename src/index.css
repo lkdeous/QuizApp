@@ -1,0 +1,84 @@
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* Gradient background */
+  background: linear-gradient(135deg, #636fdf, #133c76);
+}
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  max-width: 600px;      
+  width: 90%;       
+  padding: 30px;       
+  border-radius: 20px;   
+  text-align: center;
+  font-size: 20px;       
+}
+
+.btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+}
+
+.options button {
+  display: block;
+  width: 100%;
+  margin: 6px 0;
+  border-radius: 10px;
+  padding: 8px;
+  border: none;
+  background: #66a6ff;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  transition: 0.3s ;
+  font-size: 20px;
+}
+
+.options button:hover {
+  transform: translateY(-2px);
+  background-color: #42dd5e; 
+}
+
+.manager input {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.q-item {
+  background: #f5f8ff;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn.small {
+  padding: 5px 8px;
+  font-size: 14px;
+}
+
+
+.btn.danger {
+  background: #ff6b6b;
+}
